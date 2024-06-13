@@ -7,6 +7,11 @@ public class Items {
     private int price;
     private int is_active;
     private Type type;
+
+    public Items () {
+
+    }
+    
     public Items (int id, String name, int price, int is_active, Type type ){
         this.id = id;
         this.name = name;
