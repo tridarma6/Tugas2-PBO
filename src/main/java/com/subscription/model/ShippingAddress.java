@@ -8,6 +8,10 @@ public class ShippingAddress {
     private String province;
     private String postcode;
 
+    public ShippingAddress() {
+
+    }
+    
     public ShippingAddress(int id, int customer, String title, String line1, String line2, String city, String province, String postcode) {
         this.id = id;
         this.customer = customer;
