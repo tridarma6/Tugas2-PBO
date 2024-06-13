@@ -1,10 +1,12 @@
 public class Cards{
-    public Enum Type{
+    public enum Type{
         visa, mastercard
     }
-    public Enum Status{
+    public enum Status{
         valid, expiring, expired
     }
+
+
 
     private int id;
     private int customer;
@@ -14,6 +16,21 @@ public class Cards{
     private int expiry_year;
     private Status status;
     private int is_primary;
+
+    public Cards(){
+        
+    }
+    public Cards(int id, int customer, Cards.Type card_type, String masked_number, int expiry_month, int expiry_year,
+            Cards.Status status, int is_primary) {
+        this.id = id;
+        this.customer = customer;
+        this.card_type = card_type;
+        this.masked_number = masked_number;
+        this.expiry_month = expiry_month;
+        this.expiry_year = expiry_year;
+        this.status = status;
+        this.is_primary = is_primary;
+    }
 
     public int getId() {
         return id;
