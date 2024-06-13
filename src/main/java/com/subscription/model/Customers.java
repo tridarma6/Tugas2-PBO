@@ -1,15 +1,15 @@
-public class Customer{
+public class Customers{
     private int id;
     private String email;
     private String first_name;
     private String last_name;
     private String phone_number;
 
-    public Customer() {
+    public Customers() {
 
     }
 
-    public Customer(int id, String email, String first_name, String last_name, String phone_number) {
+    public Customers(int id, String email, String first_name, String last_name, String phone_number) {
         this.id = id;
         this.email = email;
         this.first_name = first_name;
