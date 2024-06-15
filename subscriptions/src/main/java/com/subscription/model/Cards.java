@@ -6,11 +6,8 @@ public class Cards{
     public enum Status{
         valid, expiring, expired
     }
-
-
-
     private int id;
-    private int customer;
+    private Customers customer;
     private Type card_type;
     private String masked_number;
     private int expiry_month;
@@ -21,7 +18,7 @@ public class Cards{
     public Cards(){
         
     }
-    public Cards(int id, int customer, Cards.Type card_type, String masked_number, int expiry_month, int expiry_year,
+    public Cards(int id, Customers customer, Cards.Type card_type, String masked_number, int expiry_month, int expiry_year,
             Cards.Status status, int is_primary) {
         this.id = id;
         this.customer = customer;
@@ -41,11 +38,11 @@ public class Cards{
         this.id = id;
     }
 
-    public int getCustomer() {
+    public Customers getCustomer() {
         return customer;
     }
 
-    public void setCustomer(int customer) {
+    public void setCustomer(Customers customer) {
         this.customer = customer;
     }
 

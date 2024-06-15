@@ -1,34 +1,35 @@
 package com.subscription.model;
 public class SubscriptionItems{
     
-    private int subscription;
-    private int item;
+    private Subscriptions subscription;
+    private Items item;
     private int quantity;
     private int price;
     private int amount;
     
     public SubscriptionItems(){
-
+        
     }
-
-    public SubscriptionItems(int subscription, int item, int quantity, int price, int amount) {
+    
+    public SubscriptionItems(Subscriptions subscription, Items item, int quantity, int price, int amount) {
         this.subscription = subscription;
         this.item = item;
         this.quantity = quantity;
         this.price = price;
         this.amount = amount;
     }
-    public int getSubscription() {
-        return subscription;
-    }
-    public void setSubscription(int subscription) {
+    public void setSubscription(Subscriptions subscription) {
         this.subscription = subscription;
     }
-    public int getItem() {
+    public Items getItem() {
         return item;
     }
-    public void setItem(int item) {
+
+    public void setItem(Items item) {
         this.item = item;
+    }
+    public Subscriptions getSubscription() {
+        return subscription;
     }
     public int getQuantity() {
         return quantity;

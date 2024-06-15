@@ -1,5 +1,6 @@
 package com.subscription.model;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Subscriptions{
 
@@ -8,17 +9,19 @@ public class Subscriptions{
     }
 
     private int id;
-    private int customer;
+    private Customers customer;
     private int billing_period;
     private PeriodUnit billing_period_unit;
     private int total_due;
     private LocalDateTime actived_at;
     private LocalDateTime current_term_start;
     private LocalDateTime current_term_end;
+    private List<SubscriptionItems> subscriptionItems;
+
     public Subscriptions(){
         
     }
-    public Subscriptions(int id, int customer, int billing_period, Subscriptions.PeriodUnit billing_period_unit,
+    public Subscriptions(int id, Customers customer, int billing_period, Subscriptions.PeriodUnit billing_period_unit,
             int total_due, LocalDateTime actived_at, LocalDateTime current_term_start, LocalDateTime current_term_end) {
         this.id = id;
         this.customer = customer;
@@ -35,10 +38,10 @@ public class Subscriptions{
     public void setId(int id) {
         this.id = id;
     }
-    public int getCustomer() {
+    public Customers getCustomer() {
         return customer;
     }
-    public void setCustomer(int customer) {
+    public void setCustomer(Customers customer) {
         this.customer = customer;
     }
     public int getBilling_period() {
@@ -50,8 +53,8 @@ public class Subscriptions{
     public PeriodUnit getBilling_period_unit() {
         return billing_period_unit;
     }
-    public void setBilling_period_unit(PeriodUnit billing_period_unit) {
-        this.billing_period_unit = billing_period_unit;
+    public void setBilling_period_unit(String billing_period_unit) {
+        this.billing_period_unit = PeriodUnit.valueOf(billing_period_unit);
     }
     public int getTotal_due() {
         return total_due;
@@ -76,5 +79,8 @@ public class Subscriptions{
     }
     public void setCurrent_term_end(LocalDateTime current_term_end) {
         this.current_term_end = current_term_end;
+    }
+    public void setSubscriptionItems(List<SubscriptionItems> subscriptionItems) {
+        this.subscriptionItems = subscriptionItems;
     }
 }
