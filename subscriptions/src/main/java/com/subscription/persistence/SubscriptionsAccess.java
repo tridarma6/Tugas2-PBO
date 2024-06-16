@@ -1,19 +1,17 @@
 package com.subscription.persistence;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.subscription.model.*;
 
 public class SubscriptionsAccess {
 
-    public Subscriptions getSubscriptionById(int id) throws SQLException {
+    public ArrayList<Subscriptions> getSubscriptionById(int id) throws SQLException {
         Subscriptions subscription = null;
         Connection connection = null;
         PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Subscriptions> listSubs = new ArrayList<>();
         try {
             connection = DriverManager.getConnection("jbdc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer_id, " +
@@ -27,22 +25,83 @@ public class SubscriptionsAccess {
                            "WHERE s.id = ?";
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            result = stmt.executeQuery();
 
-            if (rs.next()) {
+            if (result.next()) {
                 Customers customer = new Customers();
-                customer.setId(rs.getInt("customer_id"));
-                customer.setFirst_name(rs.getString("first_name"));
-                customer.setLast_name(rs.getString("last_name"));
+                customer.setId(result.getInt("customer_id"));
+                customer.setFirst_name(result.getString("first_name"));
+                customer.setLast_name(result.getString("last_name"));
 
                 subscription = new Subscriptions();
-                subscription.setId(rs.getInt("subscription_id"));
+                subscription.setId(result.getInt("subscription_id"));
                 subscription.setCustomer(customer);
 
                 List<SubscriptionItems> subscriptionItems = new ArrayList<>();
                 do {
                     Items item = new Items();
-                    item.setId(rs.getInt("item_id"));
+                    item.setId(result.getInt("item_id"));
+                    item.setName(result.getString("name"));
+                    item.setPrice(result.getInt("price"));
+                    item.setType(result.getString("type"));
+
+                    SubscriptionItems subscriptionItem = new SubscriptionItems();
+                    subscriptionItem.setQuantity(result.getInt("quantity"));
+                    subscriptionItem.setAmount(result.getInt("amount"));
+                    subscriptionItem.setItem(item);
+
+                    subscriptionItems.add(subscriptionItem);
+                } while (result.next());
+
+                subscription.setSubscriptionItems(subscriptionItems);
+                listSubs.add(subscription);
+            }
+        }catch(SQLException e){
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(result != null) result.close();
+            if(stmt != null) stmt.close();
+            if(connection != null) connection.close();
+        }
+        return listSubs;
+    }
+
+    public ArrayList<Subscriptions> getSubscriptionsByCustomerIdAndStatus(int customerId, String status) throws SQLException {
+        ArrayList<Subscriptions> listSubs = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement stmt = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            String query = "SELECT s.id as subscription_id, s.customer, " +
+                           "si.quantity, si.amount, si.item, " +
+                           "c.first_name, c.last_name, " +
+                           "i.name, i.price, i.type " +
+                           "FROM subscriptions s " +
+                           "JOIN customers c ON s.customer = c.id " +
+                           "JOIN subscription_items si ON si.subscription = s.id " +
+                           "JOIN items i ON si.item = i.id " +
+                           "WHERE s.customer = ? AND s.status = ?";
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, customerId);
+            stmt.setString(2, status);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Customers customer = new Customers();
+                customer.setId(rs.getInt("id"));
+                customer.setFirst_name(rs.getString("first_name"));
+                customer.setLast_name(rs.getString("last_name"));
+
+                Subscriptions subscription = new Subscriptions();
+                subscription.setId(rs.getInt("id"));
+                subscription.setCustomer(customer);
+
+                List<SubscriptionItems> subscriptionItems = new ArrayList<>();
+                do {
+                    Items item = new Items();
+                    item.setId(rs.getInt("id"));
                     item.setName(rs.getString("name"));
                     item.setPrice(rs.getInt("price"));
                     item.setType(rs.getString("type"));
@@ -56,11 +115,15 @@ public class SubscriptionsAccess {
                 } while (rs.next());
 
                 subscription.setSubscriptionItems(subscriptionItems);
+                listSubs.add(subscription);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
         }
 
-        return subscription;
+        return listSubs;
     }
 }
