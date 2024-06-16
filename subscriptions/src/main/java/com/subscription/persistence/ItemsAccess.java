@@ -129,4 +129,41 @@ public class ItemsAccess{
 
         return listItems;
     }
+
+    public String addNewItem(Items item) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        String response;
+
+        try {
+            Class.forName("org.sqlite.JBDC");
+            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+            state = conn.prepareStatement("INSERT INTO items VALUES (?, ?, ?, ?, ?);");
+            System.out.println("Inserting data to table customers");
+
+            state.setInt(1, item.getId());
+            state.setString(2, item.getName());
+            state.setInt(3, item.getPrice());
+            state.setString(4, item.getType());
+            state.setInt(5, item.getIs_active());
+            
+            int rowsAffected = state.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(state != null) state.close();
+            if(conn != null) conn.close();
+        }
+
+        return null;
+    }
 }
