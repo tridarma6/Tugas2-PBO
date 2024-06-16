@@ -86,4 +86,84 @@ public class ItemsAccess{
 
         return item;
     }
+
+    public ArrayList<Items> getItemsByIsActive(int is_active) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        ArrayList<Items> listItems = new ArrayList<>();
+
+        try {
+            Class.forName("org.sqlite.JBDC");
+            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+
+            state = conn.prepareStatement("SELECT * FROM items WHERE is_active = ?");
+            state.setInt(1, is_active);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                Items item = new Items();
+                int idt = result.getInt("id");
+                String name = result.getString("name");
+                int price = result.getInt("price");
+                String type = result.getString("type");
+                int active = result.getInt("is_active");
+
+                item.setId(idt);
+                item.setName(name);
+                item.setPrice(price);
+                item.setType(type);
+                item.setIs_active(active);
+
+                listItems.add(item);
+            }
+        }catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(result != null) result.close();
+            if(state != null) state.close();
+            if(conn != null) conn.close();
+        }
+
+        return listItems;
+    }
+
+    public String addNewItem(Items item) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        String response;
+
+        try {
+            Class.forName("org.sqlite.JBDC");
+            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+            state = conn.prepareStatement("INSERT INTO items VALUES (?, ?, ?, ?, ?);");
+            System.out.println("Inserting data to table customers");
+
+            state.setInt(1, item.getId());
+            state.setString(2, item.getName());
+            state.setInt(3, item.getPrice());
+            state.setString(4, item.getType());
+            state.setInt(5, item.getIs_active());
+            
+            int rowsAffected = state.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(state != null) state.close();
+            if(conn != null) conn.close();
+        }
+
+        return null;
+    }
 }

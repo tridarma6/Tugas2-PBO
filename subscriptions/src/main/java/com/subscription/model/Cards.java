@@ -1,16 +1,13 @@
 package com.subscription.model;
 public class Cards{
     public enum Type{
-        visa, mastercard
+        visa, mastercard;
     }
     public enum Status{
         valid, expiring, expired
     }
-
-
-
     private int id;
-    private int customer;
+    private Customers customer;
     private Type card_type;
     private String masked_number;
     private int expiry_month;
@@ -21,7 +18,7 @@ public class Cards{
     public Cards(){
         
     }
-    public Cards(int id, int customer, Cards.Type card_type, String masked_number, int expiry_month, int expiry_year,
+    public Cards(int id, Customers customer, Cards.Type card_type, String masked_number, int expiry_month, int expiry_year,
             Cards.Status status, int is_primary) {
         this.id = id;
         this.customer = customer;
@@ -41,12 +38,16 @@ public class Cards{
         this.id = id;
     }
 
-    public int getCustomer() {
+    public Customers getCustomer() {
         return customer;
     }
 
-    public void setCustomer(int customer) {
+    public void setCustomer(Customers customer) {
         this.customer = customer;
+    }
+
+    public void setCustomer(int id){
+        this.customer.setId(id);
     }
 
     public Type getCard_type() {
@@ -55,6 +56,10 @@ public class Cards{
 
     public void setCard_type(Type card_type) {
         this.card_type = card_type;
+    }
+
+    public void setCard_type(String card_type){
+        this.card_type = Type.valueOf(card_type);
     }
 
     public String getMasked_number() {
@@ -87,6 +92,10 @@ public class Cards{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setStatus(String status){
+        this.status = Status.valueOf(status);
     }
 
     public int getIs_primary() {

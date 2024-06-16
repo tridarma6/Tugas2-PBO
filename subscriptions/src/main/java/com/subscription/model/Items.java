@@ -52,9 +52,9 @@ public class Items {
     public void setIs_active(int is_active) {
         this.is_active = is_active;
     }
-
-    public Type getType() {
-        return type;
+    
+    public String getType(){
+        return type.toString();
     }
 
     public void setType(String type) {
