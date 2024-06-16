@@ -21,7 +21,7 @@ public class SubscriptionsAccess {
             statement = connection.prepareStatement("SELECT * FROM subscriptions WHERE id = ?");
             statement.setInt(1, id);
             result = statement.executeQuery();
-
+s
             while (result.next()) {
                 subscription.setId(result.getInt("id"));
                 subscription.setCustomer(result.getInt("customer"));
