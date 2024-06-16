@@ -86,4 +86,47 @@ public class ItemsAccess{
 
         return item;
     }
+
+    public ArrayList<Items> getItemsByIsActive(int is_active) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        ArrayList<Items> listItems = new ArrayList<>();
+
+        try {
+            Class.forName("org.sqlite.JBDC");
+            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+
+            state = conn.prepareStatement("SELECT * FROM items WHERE is_active = ?");
+            state.setInt(1, is_active);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                Items item = new Items();
+                int idt = result.getInt("id");
+                String name = result.getString("name");
+                int price = result.getInt("price");
+                String type = result.getString("type");
+                int active = result.getInt("is_active");
+
+                item.setId(idt);
+                item.setName(name);
+                item.setPrice(price);
+                item.setType(type);
+                item.setIs_active(active);
+
+                listItems.add(item);
+            }
+        }catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(result != null) result.close();
+            if(state != null) state.close();
+            if(conn != null) conn.close();
+        }
+
+        return listItems;
+    }
 }
