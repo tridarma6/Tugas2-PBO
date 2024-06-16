@@ -7,7 +7,10 @@ public class Subscriptions{
     public enum PeriodUnit{
         month, year
     }
+    public enum Status{
+        active, cancelled, nonrenewing
 
+    }
     private int id;
     private Customers customer;
     private int billing_period;
@@ -16,8 +19,10 @@ public class Subscriptions{
     private LocalDateTime actived_at;
     private LocalDateTime current_term_start;
     private LocalDateTime current_term_end;
-    private List<SubscriptionItems> subscriptionItems;
+    private Status status;
 
+    private List<SubscriptionItems> subscriptionItems;
+    
     public Subscriptions(){
         
     }
@@ -31,6 +36,15 @@ public class Subscriptions{
         this.actived_at = actived_at;
         this.current_term_start = current_term_start;
         this.current_term_end = current_term_end;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public void setStatus(String status){
+        this.status = Status.valueOf(status);
     }
     public int getId() {
         return id;
