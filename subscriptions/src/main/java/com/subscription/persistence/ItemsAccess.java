@@ -193,4 +193,32 @@ public class ItemsAccess{
         }
         return response;
     }
+    
+    // Spesifikasi API PUT item
+    public void updateItem(int id, Items item) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to database");
+
+            String updateSQL = "UPDATE items SET name = ?, price = ?, is_active = ?, type = ? WHERE id = ?";
+            statement = connection.prepareStatement(updateSQL);
+            statement.setString(1, item.getName());
+            statement.setInt(2, item.getPrice());
+            statement.setInt(3, item.getIs_active());
+            statement.setString(4, item.getType());
+            statement.setInt(5, id);
+            statement.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+    }
 }

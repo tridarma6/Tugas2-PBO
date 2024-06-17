@@ -87,7 +87,7 @@ public class CustomersAccess{
 
         return customer;
     }
-    // 
+    // Buat Pelangggan baru
     public String addNewCustomer(Customers customer) throws SQLException{
         Connection conn = null;
         PreparedStatement state = null;
@@ -123,5 +123,33 @@ public class CustomersAccess{
         }
 
         return response;
+    }
+
+    // Spesifikasi API PUT customer
+    public void updateCustomer(int id, Customers customer) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to database");
+
+            String updateSQL = "UPDATE customers SET email = ?, first_name = ?, last_name = ?, phone_number = ? WHERE id = ?";
+            statement = connection.prepareStatement(updateSQL);
+            statement.setString(1, customer.getEmail());
+            statement.setString(2, customer.getFirst_name());
+            statement.setString(3, customer.getLast_name());
+            statement.setString(4, customer.getPhone_number());
+            statement.setInt(5, id);
+            statement.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
     }
 }
