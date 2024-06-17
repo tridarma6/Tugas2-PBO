@@ -166,4 +166,31 @@ public class ItemsAccess{
 
         return null;
     }
+    public String deleteItem(int id) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        String response;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+            state = conn.prepareStatement("UPDATE items SET is_active = 0 WHERE id = " + id);
+            int rowsAffected = state.executeUpdate();
+            if(rowsAffected > 0){
+                response = rowsAffected + " row(s) have been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been affected";
+                System.out.println(response);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (state != null) state.close();
+            if (conn != null) conn.close();
+        }
+        return response;
+    }
 }
