@@ -164,7 +164,7 @@ public class ItemsAccess{
             if(conn != null) conn.close();
         }
 
-        return null;
+        return response;
     }
     public String deleteItem(int id) throws SQLException{
         Connection conn = null;

@@ -24,7 +24,12 @@ public class SubscriptionItems{
     public Items getItem() {
         return item;
     }
-
+    public int getItemId() {
+        return item.getId();
+    }
+    public int getSubscriptionId() {
+        return subscription.getId();
+    }
     public void setItem(Items item) {
         this.item = item;
     }

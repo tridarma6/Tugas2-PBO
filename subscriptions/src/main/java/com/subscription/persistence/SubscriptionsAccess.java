@@ -6,13 +6,15 @@ import com.subscription.model.*;
 
 public class SubscriptionsAccess {
 
-    public ArrayList<Subscriptions> getSubscriptionById(int id) throws SQLException {
+    public ArrayList<Subscriptions> getSubscriptionById(int id) throws SQLException{
         Subscriptions subscription = null;
         Connection connection = null;
         PreparedStatement stmt = null;
         ResultSet result = null;
         ArrayList<Subscriptions> listSubs = new ArrayList<>();
         try {
+            Class.forName("org.sqlite.JBDC");
+            System.out.println("has connected to the database");
             connection = DriverManager.getConnection("jbdc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer_id, " +
                            "si.quantity, si.amount, si.item_id, " +
@@ -56,7 +58,7 @@ public class SubscriptionsAccess {
                 subscription.setSubscriptionItems(subscriptionItems);
                 listSubs.add(subscription);
             }
-        }catch(SQLException e){
+        }catch(SQLException | ClassNotFoundException e){
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
         }finally{
@@ -73,6 +75,8 @@ public class SubscriptionsAccess {
         PreparedStatement stmt = null;
 
         try {
+            Class.forName("org.sqlite.JBDC");
+            System.out.println("has connected to the database");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer, " +
                            "si.quantity, si.amount, si.item, " +
@@ -125,5 +129,47 @@ public class SubscriptionsAccess {
         }
 
         return listSubs;
+    }
+
+    public String addNewSubscription(Subscriptions subscriptions) throws SQLException{
+        Connection conn = null;
+        PreparedStatement state = null;
+        String response;
+
+        try {
+            Class.forName("org.sqlite.JBDC");
+            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+
+            state = conn.prepareStatement("INSERT INTO subscriptions VALUES(?,?,?,?,?,?,?,?,?);");
+            System.out.println("Inserting data to table subscriptions");
+            state.setInt(1, subscriptions.getId());
+            state.setInt(2, subscriptions.getCustomerId());
+            state.setInt(3, subscriptions.getBilling_period());
+            state.setString(4, subscriptions.getBilling_period_unit().toString());
+            state.setInt(5, subscriptions.getTotal_due());
+            state.setString(6, subscriptions.getActived_at().toString());
+            state.setString(7, subscriptions.getCurrent_term_start().toString());
+            state.setString(8, subscriptions.getCurrent_term_start().toString());
+            state.setString(9, subscriptions.getStatus().toString());
+
+            int rowsAffected = state.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }finally{
+            if(state != null) state.close();
+            if(conn != null) conn.close();
+        }
+
+        return response;
     }
 }

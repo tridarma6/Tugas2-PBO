@@ -55,6 +55,9 @@ public class Subscriptions{
     public Customers getCustomer() {
         return customer;
     }
+    public int getCustomerId() {
+        return customer.getId();
+    }
     public void setCustomer(Customers customer) {
         this.customer = customer;
     }
