@@ -90,6 +90,7 @@ public class ShippingAddressAccess {
         return shippingAddressesList;
     }
 
+    // Get Shipping Address By CustomerId and Address id 
     public ShippingAddress getShippingAddressByCustomerIdAndAddressId(int customerId, int addressId) throws             SQLException {
         Connection conn = null;
         PreparedStatement state = null;
