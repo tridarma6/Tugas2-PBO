@@ -256,6 +256,83 @@ public class SubscriptionsAccess {
         }
         return listSubscriptions;
     }
+    // Spesifikasi untuk  mendapatkan detail informasi dengan id
+    public SubscriptionDetail getSubscriptionDetailById(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        SubscriptionDetail subscriptionDetail = new SubscriptionDetail();
+        Subscriptions subscription = new Subscriptions();
+        Customers customer = new Customers();
+        List<SubscriptionItems> subscriptionItems = new ArrayList<>();
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to database");
+
+            // Get subscription info
+            statement = connection.prepareStatement(
+                "SELECT s.id AS subscription_id, s.customer AS customer_id, s.billing_period, " +
+                "s.billing_period_unit, s.total_due, s.active_at, s.current_term_start, " +
+                "s.current_term_end, c.first_name, c.last_name, c.email, c.phone_number, " +
+                "si.item_id, i.name, i.price, i.type, si.quantity, si.amount " +
+                "FROM subscriptions s " +
+                "JOIN customers c ON s.customer = c.id " +
+                "JOIN subscription_items si ON s.id = si.subscription_id " +
+                "JOIN items i ON si.item_id = i.id " +
+                "WHERE s.id = ?"
+            );
+            statement.setInt(1, id);
+            result = statement.executeQuery();
+
+            if (result.next()) {
+                // Mengisi data pelanggan
+                customer.setId(result.getInt("customer_id"));
+                customer.setFirst_name(result.getString("first_name"));
+                customer.setLast_name(result.getString("last_name"));
+                customer.setEmail(result.getString("email"));
+                customer.setPhone_number(result.getString("phone_number"));
+
+                // Mengisi data langganan
+                subscription.setId(result.getInt("subscription_id"));
+                subscription.setCustomer(customer);
+                subscription.setBilling_period(result.getInt("billing_period"));
+                subscription.setBilling_period_unit(result.getString("billing_period_unit"));
+                subscription.setTotal_due(result.getInt("total_due"));
+                subscription.setActived_at(result.getTimestamp("active_at").toLocalDateTime());
+                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
+                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+
+                // Mengisi data item langganan
+                do {
+                    Items item = new Items();
+                    item.setId(result.getInt("item_id"));
+                    item.setName(result.getString("name"));
+                    item.setPrice(result.getInt("price"));
+                    item.setType(result.getString("type"));
+
+                    SubscriptionItems subscriptionItem = new SubscriptionItems();
+                    subscriptionItem.setQuantity(result.getInt("quantity"));
+                    subscriptionItem.setAmount(result.getInt("amount"));
+                    subscriptionItem.setItem(item);
+
+                    subscriptionItems.add(subscriptionItem);
+                } while (result.next());
+
+                subscription.setSubscriptionItems(subscriptionItems);
+                subscriptionDetail.setSubscription(subscription);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeErrorException(new Error(e));
+        } finally {
+            if (result != null) result.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        return subscriptionDetail;
+    }
 }
 
 
