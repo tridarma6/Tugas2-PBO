@@ -2,6 +2,9 @@ package com.subscription.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.RuntimeErrorException;
+
 import com.subscription.model.*;
 
 public class SubscriptionsAccess {
@@ -172,4 +175,46 @@ public class SubscriptionsAccess {
 
         return response;
     }
+
+    // Spesifikasi untuk mendapatkan semua subscription
+    public ArrayList<Subscriptions> getAllSubscribSubscriptions() throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        ArrayList<Subscriptions> listSubscriptions = new ArrayList<>();
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to database");
+            statement = connection.prepareStatement("SELECT * FROM subscriptions");
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                Subscriptions subscription = new Subscriptions();
+                subscription.setId(result.getInt("id"));
+                // Assuming customer ID is being set directly. Modify as needed.
+                Customers customer = new Customers();
+                customer.setId(result.getInt("customer"));
+                subscription.setCustomer(customer);
+                subscription.setBilling_period(result.getInt("billing_period"));
+                subscription.setBilling_period_unit(result.getString("billing_period_unit"));
+                subscription.setTotal_due(result.getInt("total_due"));
+                subscription.setActived_at(result.getTimestamp("active_at").toLocalDateTime());
+                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
+                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                listSubscriptions.add(subscription);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeErrorException(new Error(e));
+        } finally {
+            if (result != null) result.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        return listSubscriptions;
+    }
 }
+
+
