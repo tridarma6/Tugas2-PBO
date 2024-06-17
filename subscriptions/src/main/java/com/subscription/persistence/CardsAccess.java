@@ -41,7 +41,6 @@ public class CardsAccess{
             if(state != null) state.close();
             if(conn != null) conn.close();
         }
-
         return listCards;
     }
 

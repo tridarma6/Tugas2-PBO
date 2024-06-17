@@ -3,6 +3,7 @@ package com.subscription.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 
+import com.subscription.model.Customers;
 import com.subscription.model.ShippingAddress;
 
 public class ShippingAddressAccess {
@@ -35,5 +36,107 @@ public class ShippingAddressAccess {
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
+    }
+
+    // get shiping address dengan customer id
+    public ArrayList<ShippingAddress> getShippingAddressesByCustomerId(int customerId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        ArrayList<ShippingAddress> shippingAddressesList = new ArrayList<>();
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to the database");
+
+            String query = "SELECT * FROM shipping_address WHERE customer_id = ?";
+            state = conn.prepareStatement(query);
+            state.setInt(1, customerId);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                int id = result.getInt("id");
+                String title = result.getString("title");
+                String line1 = result.getString("line1");
+                String line2 = result.getString("line2");
+                String city = result.getString("city");
+                String province = result.getString("province");
+                String postcode = result.getString("postcode");
+
+                Customers customer = new Customers();
+                customer.setId(customerId);
+
+                ShippingAddress address = new ShippingAddress();
+                address.setId(id);
+                address.setCustomer(customer);
+                address.setTitle(title);
+                address.setLine1(line1);
+                address.setLine2(line2);
+                address.setCity(city);
+                address.setProvince(province);
+                address.setPostcode(postcode);
+
+                shippingAddressesList.add(address);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (result != null) result.close();
+            if (state != null) state.close();
+            if (conn != null) conn.close();
+        }
+        return shippingAddressesList;
+    }
+
+    public ShippingAddress getShippingAddressByCustomerIdAndAddressId(int customerId, int addressId) throws             SQLException {
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        ShippingAddress address = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("Connected to the database");
+
+            String query = "SELECT * FROM shipping_address WHERE customer_id = ? AND id = ?";
+            state = conn.prepareStatement(query);
+            state.setInt(1, customerId);
+            state.setInt(2, addressId);
+            result = state.executeQuery();
+
+            if (result.next()) {
+                int id = result.getInt("id");
+                String title = result.getString("title");
+                String line1 = result.getString("line1");
+                String line2 = result.getString("line2");
+                String city = result.getString("city");
+                String province = result.getString("province");
+                String postcode = result.getString("postcode");
+
+                Customers customer = new Customers();
+                customer.setId(customerId);
+
+                address = new ShippingAddress();
+                address.setId(id);
+                address.setCustomer(customer);
+                address.setTitle(title);
+                address.setLine1(line1);
+                address.setLine2(line2);
+                address.setCity(city);
+                address.setProvince(province);
+                address.setPostcode(postcode);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (result != null) result.close();
+            if (state != null) state.close();
+            if (conn != null) conn.close();
+        }
+        return address;
     }
 }
