@@ -49,7 +49,7 @@ public class CustomersAccess{
         return customersList;
     }
     // GET CUSTOMER BY ID FROM TABLE CUSTOMERS
-    public Customers getUserById(int id) throws SQLException{
+    public Customers getCustomerById(int id) throws SQLException{
         Connection conn = null;
         PreparedStatement state = null;
         ResultSet result = null;
@@ -126,10 +126,10 @@ public class CustomersAccess{
     }
 
     // Spesifikasi API PUT customer
-    public void updateCustomer(int id, Customers customer) throws SQLException {
+    public String updateCustomer(int id, Customers customer) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
+        String response;
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
@@ -142,8 +142,14 @@ public class CustomersAccess{
             statement.setString(3, customer.getLast_name());
             statement.setString(4, customer.getPhone_number());
             statement.setInt(5, id);
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
@@ -151,5 +157,6 @@ public class CustomersAccess{
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
+        return response;
     }
 }

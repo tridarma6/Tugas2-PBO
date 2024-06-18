@@ -91,7 +91,7 @@ public class ShippingAddressAccess {
     }
 
     // Get Shipping Address By CustomerId and Address id 
-    public ShippingAddress getShippingAddressByCustomerIdAndAddressId(int customerId, int addressId) throws             SQLException {
+    public ShippingAddress getShippingAddressByCustomerIdAndAddressId(int customerId) throws SQLException {
         Connection conn = null;
         PreparedStatement state = null;
         ResultSet result = null;
@@ -102,10 +102,9 @@ public class ShippingAddressAccess {
             conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("Connected to the database");
 
-            String query = "SELECT * FROM shipping_address WHERE customer_id = ? AND id = ?";
+            String query = "SELECT * FROM shipping_address WHERE id = ?";
             state = conn.prepareStatement(query);
             state.setInt(1, customerId);
-            state.setInt(2, addressId);
             result = state.executeQuery();
 
             if (result.next()) {
