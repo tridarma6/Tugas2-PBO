@@ -1,14 +1,18 @@
 package com.subscription.httpserver;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class ServerHandler implements HttpHandler {
+    String response;
     ResponseHandler responseHandler = new ResponseHandler();
     CustomersReqHandler customersReqHandler = new CustomersReqHandler();
     ItemsReqHandler itemsReqHandler = new ItemsReqHandler();
@@ -20,7 +24,7 @@ public class ServerHandler implements HttpHandler {
         try {
             if ("GET".equals(exchange.getRequestMethod())) {
                 if (path.length == 0 || (path.length == 1 && path[0].isEmpty())) {
-                    responseHandler.sendResponse(exchange, 200, "Success");
+                    responseHandler.sendResponse(exchange, 200, "Hei!");
                 } else if ("customers".equals(path[1])) {
                     handleCustomersRequest(exchange, path);
                 } else if ("items".equals(path[1])) {
@@ -30,8 +34,37 @@ public class ServerHandler implements HttpHandler {
                 } else {
                     responseHandler.sendResponse(exchange, 404, "Not Found p");
                 }
-                
-            } else {
+            
+            }
+            else if ("POST".equals(exchange.getRequestMethod())) {
+                if ("customers".equals(path[1])) {
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = customersReqHandler.postCustomer(jsonRequestBody);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if("items".equals(path[1])){
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = itemsReqHandler.postItems(jsonRequestBody);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            }
+             else {
                 responseHandler.sendResponse(exchange, 405, "Method Not Allowed");
             }
         } catch (Exception e) {
@@ -82,5 +115,15 @@ public class ServerHandler implements HttpHandler {
             e.printStackTrace();
             responseHandler.sendResponse(exchange, 500, "Internal Server Error");
         }
+    }
+
+    private void handleUnsupportedMethod (HttpExchange exchange) throws IOException {
+        response = "RequestHandler method tidak didukung/tidak ada.";
+        responseHandler.sendResponse(exchange, 405, response);
+    }
+
+    private String parseRequestBody(InputStream requestBody) throws IOException {
+        byte[] requestBodyBytes = requestBody.readAllBytes();
+        return new String(requestBodyBytes, StandardCharsets.UTF_8);
     }
 }
