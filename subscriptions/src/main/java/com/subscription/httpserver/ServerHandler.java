@@ -12,6 +12,7 @@ public class ServerHandler implements HttpHandler {
     ResponseHandler responseHandler = new ResponseHandler();
     CustomersReqHandler customersReqHandler = new CustomersReqHandler();
     ItemsReqHandler itemsReqHandler = new ItemsReqHandler();
+    SubscriptionsReqHandler subscriptionsReqHandler = new SubscriptionsReqHandler();
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String[] path = exchange.getRequestURI().getPath().split("/");
@@ -24,8 +25,10 @@ public class ServerHandler implements HttpHandler {
                     handleCustomersRequest(exchange, path);
                 } else if ("items".equals(path[1])) {
                     handleItemsRequest(exchange, path);
+                } else if ("subscriptions".equals(path[1])) {
+                    handleSubscripitonsRequest(exchange, path);
                 } else {
-                    responseHandler.sendResponse(exchange, 404, "Not Found");
+                    responseHandler.sendResponse(exchange, 404, "Not Found p");
                 }
                 
             } else {
@@ -45,6 +48,20 @@ public class ServerHandler implements HttpHandler {
                 responseHandler.getResponse(exchange, jsonCustomer.toString(), path, "customer", 200);
             } else {
                 responseHandler.sendResponse(exchange, 404, "Not Found");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            responseHandler.sendResponse(exchange, 500, "Internal Server Error");
+        }
+    }
+    private void handleSubscripitonsRequest(HttpExchange exchange, String[] path) throws IOException {
+        JSONObject jsonSubs = null;
+        try {
+            jsonSubs = subscriptionsReqHandler.getSubscriptions(path);
+            if (jsonSubs != null) {
+                responseHandler.getResponse(exchange, jsonSubs.toString(), path, "subscripitons", 200);
+            } else {
+                responseHandler.sendResponse(exchange, 404, "Not Found P");
             }
         } catch (SQLException e) {
             e.printStackTrace();

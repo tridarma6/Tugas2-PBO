@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import com.subscription.model.Customers;
 import com.subscription.model.ShippingAddress;
-import com.subscription.model.Subscriptions;
 import com.subscription.persistence.CardsAccess;
 import com.subscription.persistence.CustomersAccess;
 import com.subscription.persistence.SubscriptionsAccess;
@@ -80,9 +79,13 @@ public class CustomersReqHandler {
                         jsonCustomer.put("Customer's Subscription Record", getFormattedCustomerSubscriptionRecord(idCustomer));
                         break;
                     case SUBSCRIPTIONS_STATUS_ACTIVE:
+                        jsonCustomer.put("Customer's Subscription Record", getFormattedCustomerSubscriptionStatusRecord(idCustomer, "active"));
+                        break;
                     case SUBSCRIPTIONS_STATUS_CANCELLED:
+                        jsonCustomer.put("Customer's Subscription Record", getFormattedCustomerSubscriptionStatusRecord(idCustomer, "cancelled"));
+                        break;
                     case SUBSCRIPTIONS_STATUS_NONRENEWING:
-                        jsonCustomer.put("Customer's Subscription Record", getSubscriptionRecordByStatus(idCustomer, recordType));
+                        jsonCustomer.put("Customer's Subscription Record", getFormattedCustomerSubscriptionStatusRecord(idCustomer, "nonrenewing"));
                         break;
                     case SHIPPING_ADDRESS:
                         jsonCustomer.put("Customer's Shipping Address Record", getShippingAddressRecord(idCustomer));
@@ -120,6 +123,18 @@ public class CustomersReqHandler {
         return formattedJson;
     }
 
+    public JSONObject getFormattedCustomerSubscriptionStatusRecord(int customerId, String status) throws SQLException{
+        JSONObject customerAndSubscriptions = subscriptionsAccess.getCustomerAndSubscriptionsStatusByCustomerId(customerId, status);
+        JSONObject formattedJson = new JSONObject();
+
+        JSONArray customerSubsArray = new JSONArray();
+        customerSubsArray.put(customerAndSubscriptions);
+
+        formattedJson.put(SUBSCRIPTIONS, customerSubsArray);
+        return formattedJson;
+    }
+
+    
     private JSONObject toJSONObject(Customers customers) {
         JSONObject jsonCusResult = new JSONObject();
         jsonCusResult.put("id", customers.getId());
@@ -128,60 +143,6 @@ public class CustomersReqHandler {
         jsonCusResult.put("last_name", customers.getLast_name());
         jsonCusResult.put("phone_number", customers.getPhone_number());
         return jsonCusResult;
-    }
-
-    private JSONObject getSubscriptionRecord(int idCustomer) throws SQLException {
-        JSONObject jsonSubscription = new JSONObject();
-        JSONArray jsonSubscriptionArray = new JSONArray();
-
-        ArrayList<Subscriptions> listSubscriptions = subscriptionsAccess.getSubscriptionById(idCustomer);
-        for (Subscriptions subscription : listSubscriptions) {
-            jsonSubscriptionArray.put(toJSONObject(subscription));
-        }
-
-        jsonSubscription.put("Subscription Record", jsonSubscriptionArray);
-        return jsonSubscription;
-    }
-
-    private JSONObject getSubscriptionRecordByStatus(int idCustomer, String status) throws SQLException {
-        JSONObject jsonSubscription = new JSONObject();
-        JSONArray jsonSubscriptionArray = new JSONArray();
-
-        ArrayList<Subscriptions> listSubscriptions;
-        switch (status) {
-            case SUBSCRIPTIONS_STATUS_ACTIVE:
-                listSubscriptions = subscriptionsAccess.getSubscriptionsByCustomerIdAndStatus(idCustomer, "active");
-                break;
-            case SUBSCRIPTIONS_STATUS_CANCELLED:
-                listSubscriptions = subscriptionsAccess.getSubscriptionsByCustomerIdAndStatus(idCustomer, "cancelled");
-                break;
-            case SUBSCRIPTIONS_STATUS_NONRENEWING:
-                listSubscriptions = subscriptionsAccess.getSubscriptionsByCustomerIdAndStatus(idCustomer, "nonrenewing");
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown status: " + status);
-        }
-
-        for (Subscriptions subscription : listSubscriptions) {
-            jsonSubscriptionArray.put(toJSONObject(subscription));
-        }
-
-        jsonSubscription.put("Subscription Record", jsonSubscriptionArray);
-        return jsonSubscription;
-    }
-
-    private JSONObject toJSONObject(Subscriptions subscription) {
-        JSONObject jsonSubscriptionRecord = new JSONObject();
-        jsonSubscriptionRecord.put("id", subscription.getId());
-        jsonSubscriptionRecord.put("customer", subscription.getCustomer());
-        jsonSubscriptionRecord.put("billing_period", subscription.getBilling_period());
-        jsonSubscriptionRecord.put("billing_period_unit", subscription.getBilling_period_unit());
-        jsonSubscriptionRecord.put("total_due", subscription.getTotal_due());
-        jsonSubscriptionRecord.put("active_at", subscription.getActived_at());
-        jsonSubscriptionRecord.put("current_term_start", subscription.getCurrent_term_start());
-        jsonSubscriptionRecord.put("current_term_end", subscription.getCurrent_term_end());
-        jsonSubscriptionRecord.put("status", subscription.getStatus());
-        return jsonSubscriptionRecord;
     }
 
     private JSONObject getShippingAddressRecord(int idCustomer) throws SQLException {

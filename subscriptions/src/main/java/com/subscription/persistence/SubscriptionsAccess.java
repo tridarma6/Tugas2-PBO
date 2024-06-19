@@ -12,7 +12,7 @@ import com.subscription.model.*;
 
 public class SubscriptionsAccess {
 
-    public ArrayList<Subscriptions> getSubscriptionById(int id) throws SQLException{
+    public ArrayList<Subscriptions> getSubscriptionById(int id) throws SQLException {
         Subscriptions subscription = null;
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -22,55 +22,64 @@ public class SubscriptionsAccess {
             Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
-            String query = "SELECT s.id as subscription_id, s.customer_id, " +
-                           "si.quantity, si.amount, si.item_id, " +
-                           "c.first_name, c.last_name, " +
-                           "i.name, i.price, i.type " +
-                           "FROM subscriptions s " +
-                           "JOIN customers c ON s.customer_id = c.id " +
-                           "JOIN subscription_items si ON si.subscription_id = s.id " +
-                           "JOIN items i ON si.item_id = i.id " +
-                           "WHERE s.id = ?";
+            String query = "SELECT s.id as subscription_id, s.customer, s.billing_period, s.billing_period_unit, s.total_due, " +
+                    "s.actived_at, s.current_term_start, s.current_term_end, s.status, " +
+                    "c.first_name, c.last_name, " +
+                    "si.quantity, si.amount, si.item, " +
+                    "i.id as item_id, i.name as item_name, i.price as item_price, i.type as item_type, i.is_active " +
+                    "FROM subscriptions s " +
+                    "JOIN customers c ON s.customer = c.id " +
+                    "JOIN subscription_items si ON si.subscription = s.id " +
+                    "JOIN items i ON si.item = i.id " +
+                    "WHERE s.id = ?";
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, id);
             result = stmt.executeQuery();
-
+    
             if (result.next()) {
                 Customers customer = new Customers();
-                customer.setId(result.getInt("customer_id"));
+                customer.setId(result.getInt("customer"));
                 customer.setFirst_name(result.getString("first_name"));
                 customer.setLast_name(result.getString("last_name"));
-
+    
                 subscription = new Subscriptions();
                 subscription.setId(result.getInt("subscription_id"));
                 subscription.setCustomer(customer);
-
+                subscription.setBilling_period(result.getInt("billing_period"));
+                subscription.setBilling_period_unit(result.getString("billing_period_unit"));
+                subscription.setTotal_due(result.getInt("total_due"));
+                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
+                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
+                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                subscription.setStatus(result.getString("status"));
+    
                 List<SubscriptionItems> subscriptionItems = new ArrayList<>();
                 do {
                     Items item = new Items();
                     item.setId(result.getInt("item_id"));
-                    item.setName(result.getString("name"));
-                    item.setPrice(result.getInt("price"));
-                    item.setType(result.getString("type"));
-
+                    item.setName(result.getString("item_name"));
+                    item.setPrice(result.getInt("item_price"));
+                    item.setType(result.getString("item_type"));
+                    item.setIs_active(result.getInt("is_active"));
+    
                     SubscriptionItems subscriptionItem = new SubscriptionItems();
                     subscriptionItem.setQuantity(result.getInt("quantity"));
                     subscriptionItem.setAmount(result.getInt("amount"));
                     subscriptionItem.setItem(item);
-
+    
                     subscriptionItems.add(subscriptionItem);
                 } while (result.next());
-
+    
                 subscription.setSubscriptionItems(subscriptionItems);
                 listSubs.add(subscription);
             }
-        }catch(SQLException | ClassNotFoundException e){
+        } catch (SQLException | ClassNotFoundException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
-        }finally{
-            if(result != null) result.close();
-            if(stmt != null) stmt.close();
-            if(connection != null) connection.close();
+        } finally {
+            if (result != null) result.close();
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
         }
         return listSubs;
     }
@@ -179,8 +188,9 @@ public class SubscriptionsAccess {
         return response;
     }
 
+
     // Spesifikasi untuk mendapatkan semua subscription
-    public ArrayList<Subscriptions> getAllSubscribSubscriptions() throws SQLException {
+    public ArrayList<Subscriptions> getAllSubscriptions() throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -203,7 +213,7 @@ public class SubscriptionsAccess {
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("active_at").toLocalDateTime());
+                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
                 subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
                 subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
                 listSubscriptions.add(subscription);
@@ -244,7 +254,7 @@ public class SubscriptionsAccess {
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("active_at").toLocalDateTime());
+                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
                 subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
                 subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
                 listSubscriptions.add(subscription);
@@ -303,7 +313,7 @@ public class SubscriptionsAccess {
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("active_at").toLocalDateTime());
+                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
                 subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
                 subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
 
@@ -355,6 +365,64 @@ public class SubscriptionsAccess {
                         "WHERE cu.id = ?";
             state = conn.prepareStatement(query);
             state.setInt(1, id);
+            result = state.executeQuery();
+            
+            boolean customerDetailsSet = false;
+            while (result.next()) {
+                if (!customerDetailsSet) {
+                    customerRecord.put("id", result.getInt("customer"));
+                    customerRecord.put("first_name", result.getString("first_name"));
+                    customerRecord.put("last_name", result.getString("last_name"));
+                    customerRecord.put("email", result.getString("email"));
+                    customerRecord.put("phone_number", result.getString("phone_number"));
+                    customerDetailsSet = true;
+                }
+                
+                JSONObject subsJson = new JSONObject();
+                subsJson.put("id", result.getInt("id"));
+                subsJson.put("customer", result.getInt("customer"));
+                subsJson.put("billing_period", result.getInt("billing_period"));
+                subsJson.put("billing_period_unit", result.getString("billing_period_unit"));
+                subsJson.put("total_due", result.getInt("total_due"));
+                subsJson.put("actived_at", result.getInt("actived_at"));
+                subsJson.put("current_term_start", result.getString("current_term_start"));
+                subsJson.put("current_term_end", result.getString("current_term_end"));
+                subsJson.put("status", result.getString("status"));
+                
+                listSubs.put(subsJson);
+            }
+            
+            customerRecord.put("subscriptions", listSubs);
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (result != null) result.close();
+            if (state != null) state.close();
+            if (conn != null) conn.close();
+        }
+        return customerRecord;
+    }
+    public JSONObject getCustomerAndSubscriptionsStatusByCustomerId(int id, String status) throws SQLException {
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        JSONObject customerRecord = new JSONObject();
+        JSONArray listSubs = new JSONArray();
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+            
+            String query = "SELECT s.*, cu.first_name, cu.last_name, cu.email, cu.phone_number " +
+                        "FROM subscriptions s " +
+                        "JOIN customers cu ON cu.id = s.customer " +
+                        "WHERE cu.id = ? AND s.status = ?";
+            state = conn.prepareStatement(query);
+            state.setInt(1, id);
+            state.setString(2, status);
             result = state.executeQuery();
             
             boolean customerDetailsSet = false;
