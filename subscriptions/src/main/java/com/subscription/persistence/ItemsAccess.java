@@ -13,8 +13,8 @@ public class ItemsAccess{
         ArrayList<Items> itemsList = new ArrayList<>();
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to database");
             state = conn.prepareStatement("SELECT * FROM items");
             result = state.executeQuery();
@@ -87,19 +87,18 @@ public class ItemsAccess{
         return item;
     }
 
-    public ArrayList<Items> getItemsByIsActive(int is_active) throws SQLException{
+    public ArrayList<Items> getItemsByIsActive() throws SQLException{
         Connection conn = null;
         PreparedStatement state = null;
         ResultSet result = null;
         ArrayList<Items> listItems = new ArrayList<>();
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
 
-            state = conn.prepareStatement("SELECT * FROM items WHERE is_active = ?");
-            state.setInt(1, is_active);
+            state = conn.prepareStatement("SELECT * FROM items WHERE is_active = 1");
             result = state.executeQuery();
 
             while (result.next()) {
@@ -136,8 +135,8 @@ public class ItemsAccess{
         String response;
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("INSERT INTO items VALUES (?, ?, ?, ?, ?);");
             System.out.println("Inserting data to table customers");

@@ -15,8 +15,7 @@ public class CustomersAccess{
         ArrayList<Customers> customersList = new ArrayList<>();
 
         try{
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("SELECT * FROM customers");
             result = state.executeQuery();
@@ -38,7 +37,7 @@ public class CustomersAccess{
 
                 customersList.add(customer);
             }
-        }catch(SQLException | ClassNotFoundException e){
+        }catch(SQLException e){
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
         }finally{
@@ -49,15 +48,15 @@ public class CustomersAccess{
         return customersList;
     }
     // GET CUSTOMER BY ID FROM TABLE CUSTOMERS
-    public Customers getUserById(int id) throws SQLException{
+    public Customers getCustomerById(int id) throws SQLException{
         Connection conn = null;
         PreparedStatement state = null;
         ResultSet result = null;
         Customers customer = new Customers();
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
             state.setInt(1, id);
@@ -95,8 +94,8 @@ public class CustomersAccess{
         String response;
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("INSERT INTO customers VALUES (?, ?, ?, ?, ?);");
             System.out.println("Inserting data to table customers");
@@ -126,10 +125,10 @@ public class CustomersAccess{
     }
 
     // Spesifikasi API PUT customer
-    public void updateCustomer(int id, Customers customer) throws SQLException {
+    public String updateCustomer(int id, Customers customer) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
+        String response;
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
@@ -142,8 +141,14 @@ public class CustomersAccess{
             statement.setString(3, customer.getLast_name());
             statement.setString(4, customer.getPhone_number());
             statement.setInt(5, id);
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
@@ -151,5 +156,6 @@ public class CustomersAccess{
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
+        return response;
     }
 }

@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.management.RuntimeErrorException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.subscription.model.*;
 
 public class SubscriptionsAccess {
@@ -16,9 +19,9 @@ public class SubscriptionsAccess {
         ResultSet result = null;
         ArrayList<Subscriptions> listSubs = new ArrayList<>();
         try {
-            Class.forName("org.sqlite.JBDC");
+            Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
-            connection = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer_id, " +
                            "si.quantity, si.amount, si.item_id, " +
                            "c.first_name, c.last_name, " +
@@ -78,7 +81,7 @@ public class SubscriptionsAccess {
         PreparedStatement stmt = null;
 
         try {
-            Class.forName("org.sqlite.JBDC");
+            Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer, " +
@@ -140,8 +143,8 @@ public class SubscriptionsAccess {
         String response;
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
 
             state = conn.prepareStatement("INSERT INTO subscriptions VALUES(?,?,?,?,?,?,?,?,?);");
@@ -332,6 +335,64 @@ public class SubscriptionsAccess {
             if (connection != null) connection.close();
         }
         return subscriptionDetail;
+    }
+
+    public JSONObject getCustomerAndSubscriptionsByCustomerId(int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet result = null;
+        JSONObject customerRecord = new JSONObject();
+        JSONArray listSubs = new JSONArray();
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
+            System.out.println("has connected to the database");
+            
+            String query = "SELECT s.*, cu.first_name, cu.last_name, cu.email, cu.phone_number " +
+                        "FROM subscriptions s " +
+                        "JOIN customers cu ON cu.id = s.customer " +
+                        "WHERE cu.id = ?";
+            state = conn.prepareStatement(query);
+            state.setInt(1, id);
+            result = state.executeQuery();
+            
+            boolean customerDetailsSet = false;
+            while (result.next()) {
+                if (!customerDetailsSet) {
+                    customerRecord.put("id", result.getInt("customer"));
+                    customerRecord.put("first_name", result.getString("first_name"));
+                    customerRecord.put("last_name", result.getString("last_name"));
+                    customerRecord.put("email", result.getString("email"));
+                    customerRecord.put("phone_number", result.getString("phone_number"));
+                    customerDetailsSet = true;
+                }
+                
+                JSONObject subsJson = new JSONObject();
+                subsJson.put("id", result.getInt("id"));
+                subsJson.put("customer", result.getInt("customer"));
+                subsJson.put("billing_period", result.getInt("billing_period"));
+                subsJson.put("billing_period_unit", result.getString("billing_period_unit"));
+                subsJson.put("total_due", result.getInt("total_due"));
+                subsJson.put("actived_at", result.getInt("actived_at"));
+                subsJson.put("current_term_start", result.getString("current_term_start"));
+                subsJson.put("current_term_end", result.getString("current_term_end"));
+                subsJson.put("status", result.getString("status"));
+                
+                listSubs.put(subsJson);
+            }
+            
+            customerRecord.put("subscriptions", listSubs);
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            if (result != null) result.close();
+            if (state != null) state.close();
+            if (conn != null) conn.close();
+        }
+        return customerRecord;
     }
 }
 
