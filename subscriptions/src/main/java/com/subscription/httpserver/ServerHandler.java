@@ -63,6 +63,30 @@ public class ServerHandler implements HttpHandler {
                     }
 
                 }
+            }else if ("PUT".equals(exchange.getRequestMethod())) {
+                if ("customers".equals(path[1])) {
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = customersReqHandler.putCustomer(jsonRequestBody, path);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        // Handle invalid JSON format
+                        System.err.println("Invalid JSON format: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        // Handle SQL exceptions
+                        System.err.println("SQL Exception: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 500, "Internal Server Error");
+                    }
+                }else if("items".equals(path[1])){
+
+                }else if("shipping_address".equals(path[3])){
+                    
+                }
+            }else if("DELETE".equals(exchange.getRequestMethod())){
+
             }
              else {
                 responseHandler.sendResponse(exchange, 405, "Method Not Allowed");
