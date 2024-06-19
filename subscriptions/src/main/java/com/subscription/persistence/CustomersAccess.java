@@ -55,8 +55,8 @@ public class CustomersAccess{
         Customers customer = new Customers();
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
             state.setInt(1, id);
@@ -94,8 +94,8 @@ public class CustomersAccess{
         String response;
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("INSERT INTO customers VALUES (?, ?, ?, ?, ?);");
             System.out.println("Inserting data to table customers");

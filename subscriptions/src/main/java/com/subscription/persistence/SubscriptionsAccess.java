@@ -16,9 +16,9 @@ public class SubscriptionsAccess {
         ResultSet result = null;
         ArrayList<Subscriptions> listSubs = new ArrayList<>();
         try {
-            Class.forName("org.sqlite.JBDC");
+            Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
-            connection = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer_id, " +
                            "si.quantity, si.amount, si.item_id, " +
                            "c.first_name, c.last_name, " +
@@ -78,7 +78,7 @@ public class SubscriptionsAccess {
         PreparedStatement stmt = null;
 
         try {
-            Class.forName("org.sqlite.JBDC");
+            Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             String query = "SELECT s.id as subscription_id, s.customer, " +
@@ -140,8 +140,8 @@ public class SubscriptionsAccess {
         String response;
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
 
             state = conn.prepareStatement("INSERT INTO subscriptions VALUES(?,?,?,?,?,?,?,?,?);");

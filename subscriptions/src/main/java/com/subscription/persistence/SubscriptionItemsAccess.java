@@ -11,9 +11,9 @@ public class SubscriptionItemsAccess{
         PreparedStatement state = null;
         String response;
         try {
-            Class.forName("org.sqlite.JBDC");
+            Class.forName("org.sqlite.JDBC");
             System.out.println("has connected to the database");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             state = conn.prepareStatement("INSERT INTO subscription_items VALUES(?,?,?,?,?,?);");
             System.out.println("Inserting data to table subscriptions");
             state.setInt(1, subscriptionItems.getSubscriptionId());

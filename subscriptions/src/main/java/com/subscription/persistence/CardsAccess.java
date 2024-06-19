@@ -13,8 +13,8 @@ public class CardsAccess{
         ResultSet result = null;
         ArrayList<Cards> listCards = new ArrayList<>();
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("SELECT * FROM cards WHERE customer = ?");
             state.setInt(1, id);
