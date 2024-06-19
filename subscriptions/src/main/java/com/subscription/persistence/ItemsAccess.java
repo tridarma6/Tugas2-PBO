@@ -13,8 +13,8 @@ public class ItemsAccess{
         ArrayList<Items> itemsList = new ArrayList<>();
 
         try {
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to database");
             state = conn.prepareStatement("SELECT * FROM items");
             result = state.executeQuery();

@@ -15,8 +15,7 @@ public class CustomersAccess{
         ArrayList<Customers> customersList = new ArrayList<>();
 
         try{
-            Class.forName("org.sqlite.JBDC");
-            conn = DriverManager.getConnection("jbdc:sqlite:subscription.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("has connected to the database");
             state = conn.prepareStatement("SELECT * FROM customers");
             result = state.executeQuery();
@@ -38,7 +37,7 @@ public class CustomersAccess{
 
                 customersList.add(customer);
             }
-        }catch(SQLException | ClassNotFoundException e){
+        }catch(SQLException e){
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             throw new RuntimeException(e);
         }finally{
