@@ -36,8 +36,8 @@ public class ShippingAddress {
         return customer;
     }
 
-    public void setCustomer(Customers customer) {
-        this.customer = customer;
+    public void setCustomer(String customer) {
+        this.customer = Customers.valueOf(customer);
     }
 
     public String getTitle() {
@@ -86,5 +86,10 @@ public class ShippingAddress {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    public void setCustomer(Customers customer2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCustomer'");
     }
 }

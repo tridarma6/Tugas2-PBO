@@ -8,15 +8,19 @@ import java.sql.SQLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.subscription.model.ShippingAddress;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class ServerHandler implements HttpHandler {
     String response;
+    ShippingAddressReqHandler shippingAddressReqHandler = new ShippingAddressReqHandler();
     ResponseHandler responseHandler = new ResponseHandler();
     CustomersReqHandler customersReqHandler = new CustomersReqHandler();
     ItemsReqHandler itemsReqHandler = new ItemsReqHandler();
     SubscriptionsReqHandler subscriptionsReqHandler = new SubscriptionsReqHandler();
+    CardsReqHandler cardsReqHandler = new CardsReqHandler();
+    
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String[] path = exchange.getRequestURI().getPath().split("/");
@@ -81,12 +85,66 @@ public class ServerHandler implements HttpHandler {
                         responseHandler.sendResponse(exchange, 500, "Internal Server Error");
                     }
                 }else if("items".equals(path[1])){
-
-                }else if("shipping_address".equals(path[3])){
-                    
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = itemsReqHandler.putItems(jsonRequestBody, path);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        // Handle invalid JSON format
+                        System.err.println("Invalid JSON format: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        // Handle SQL exceptions
+                        System.err.println("SQL Exception: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 500, "Internal Server Error");
+                    }
+                }else if("shipping_address".equals(path[1])){
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = shippingAddressReqHandler.updateShippingAddress(jsonRequestBody, path);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        // Handle invalid JSON format
+                        System.err.println("Invalid JSON format: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        // Handle SQL exceptions
+                        System.err.println("SQL Exception: " + e.getMessage());
+                        responseHandler.sendResponse(exchange, 500, "Internal Server Error");
+                    }
                 }
             }else if("DELETE".equals(exchange.getRequestMethod())){
-
+                if ("items".equals(path[2])) {
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = itemsReqHandler.deleteItems(jsonRequestBody, path);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if("cards".equals(path[1])){
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = cardsReqHandler.deleteCards(jsonRequestBody, path);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
              else {
                 responseHandler.sendResponse(exchange, 405, "Method Not Allowed");

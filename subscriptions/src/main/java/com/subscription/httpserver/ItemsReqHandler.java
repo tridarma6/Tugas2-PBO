@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.subscription.model.Customers;
 import com.subscription.model.Items;
 import com.subscription.persistence.ItemsAccess;
 
@@ -26,6 +28,17 @@ public class ItemsReqHandler {
         return itemsAccess.addNewItem(item);
     }
 
+    public String putItems(JSONObject jsonObject, String[] path) throws SQLException {
+        Items item = itemsParseJSONData(jsonObject);
+        int idItem = Integer.parseInt(path[2]);
+        return itemsAccess.updateItem(idItem, item);
+    }
+
+    public String deleteItems(JSONObject jsonObject, String[] path) throws SQLException {
+        int idItem = Integer.parseInt(path[2]);
+        return itemsAccess.deleteItem(idItem);
+    }
+    
     public JSONObject getItems(String path[]) throws SQLException {
         int idItem = 0;
         JSONObject jsonItem = null;
@@ -81,4 +94,6 @@ public class ItemsReqHandler {
 
         return jsonItem;
     }
+
+    
 }

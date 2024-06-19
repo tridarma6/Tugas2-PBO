@@ -57,4 +57,9 @@ public class Customers{
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
+
+    public static Customers valueOf(String customer) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'valueOf'");
+    }
 }

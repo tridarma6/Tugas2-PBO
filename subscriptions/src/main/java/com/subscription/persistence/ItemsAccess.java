@@ -194,10 +194,10 @@ public class ItemsAccess{
     }
     
     // Spesifikasi API PUT item
-    public void updateItem(int id, Items item) throws SQLException {
+    public String updateItem(int id, Items item) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
+        String response;
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
@@ -210,7 +210,14 @@ public class ItemsAccess{
             statement.setInt(3, item.getIs_active());
             statement.setString(4, item.getType());
             statement.setInt(5, id);
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 0) {
+                response = rowsAffected + " row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "No rows have been added";
+                System.out.println(response);
+            }
 
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -219,5 +226,7 @@ public class ItemsAccess{
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
+
+        return response;
     }
 }
