@@ -24,13 +24,25 @@ public class SubscriptionsReqHandler{
 
         switch (path.length) {
             case 2:
-                JSONArray jsonSubsArray = new JSONArray();
-                ArrayList<Subscriptions> listSubs = subscriptionsAccess.getAllSubscriptions();
-                for (Subscriptions subs : listSubs) {
-                    jsonSubsArray.put(toJSONObject(subs));
+                if ("subscriptions".equals(path[1])) {
+                    
+                    JSONArray jsonSubsArray = new JSONArray();
+                    ArrayList<Subscriptions> listSubs = subscriptionsAccess.getAllSubscriptions();
+                    for (Subscriptions subs : listSubs) {
+                        jsonSubsArray.put(toJSONObject(subs));
+                    }
+                    jsonSubs.put(SUBSCRIPTIONS_RECORD, jsonSubsArray);
+                    break;
+                }else if(SUBSCRIPTIONS_SORTBY.equals(path[1])){
+                    JSONArray jsonSubsArray = new JSONArray();
+                    ArrayList<Subscriptions> listSubs = subscriptionsAccess.getAllSubscriptionsSortedByTermEnd();
+                    for (Subscriptions subs : listSubs) {
+                        jsonSubsArray.put(toJSONObject(subs));
+                    }
+                    jsonSubs.put(SUBSCRIPTIONS_RECORD, jsonSubsArray);
+                    break;
+
                 }
-                jsonSubs.put(SUBSCRIPTIONS_RECORD, jsonSubsArray);
-                break;
             case 3:
                 subsId = Integer.parseInt(path[2]);
                 ArrayList<Subscriptions> subscriptions = subscriptionsAccess.getSubscriptionById(subsId);
@@ -38,7 +50,6 @@ public class SubscriptionsReqHandler{
                     jsonSubs.put(SUBSCRIPTIONS, subscriptions);
                 }
                 break;
-        
             case 4:
                 
                 break;
