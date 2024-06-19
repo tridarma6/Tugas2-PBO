@@ -107,5 +107,4 @@ public class Cards{
         this.is_primary = is_primary;
     }
 
-
 }
