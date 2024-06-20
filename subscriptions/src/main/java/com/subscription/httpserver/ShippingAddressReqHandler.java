@@ -28,13 +28,13 @@ public class ShippingAddressReqHandler{
         try {
             // Mengambil customerId dan addressId dari path
             int customerId = Integer.parseInt(path[2]);
-            int addressId = Integer.parseInt(path[3]);
+            int addressId = Integer.parseInt(path[4]);
 
             // Mengurai objek JSON menjadi ShippingAddress
             ShippingAddress shippingAddress = parseShippingAddressFromJSON(jsonRequestBody);
 
             // Memperbarui alamat pengiriman
-            shippingAddressAccess.updateShippingAddress(customerId, addressId, shippingAddress);
+            String response = shippingAddressAccess.updateShippingAddress(customerId, addressId, shippingAddress);
 
             // Mengembalikan respons sukses
             return "{\"status\":\"success\",\"message\":\"Alamat pengiriman berhasil diperbarui.\"}";

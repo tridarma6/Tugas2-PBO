@@ -36,8 +36,16 @@ public class ShippingAddress {
         return customer;
     }
 
+    public int getCustomerId() {
+        return customer.getId();
+    }
+
     public void setCustomer(String customer) {
         this.customer = Customers.valueOf(customer);
+    }
+
+    public void setCustomer(int customer) {
+        this.customer.setId(customer); 
     }
 
     public String getTitle() {
@@ -89,7 +97,6 @@ public class ShippingAddress {
     }
 
     public void setCustomer(Customers customer2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setCustomer'");
+        this.customer = customer2;
     }
 }

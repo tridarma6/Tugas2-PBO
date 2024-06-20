@@ -8,16 +8,16 @@ import com.subscription.model.ShippingAddress;
 
 public class ShippingAddressAccess {
     
-    public void updateShippingAddress(int customerId, int addressId, ShippingAddress address) throws SQLException {
+    public String updateShippingAddress(int customerId, int addressId, ShippingAddress address) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
+        String response;
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:subscription.db");
             System.out.println("Connected to database");
 
-            String updateSQL = "UPDATE shipping_addresses SET title = ?, line1 = ?, line2 = ?, city = ?, province = ?, postcode = ? WHERE id = ? AND customer_id = ?";
+            String updateSQL = "UPDATE shipping_address SET title = ?, line1 = ?, line2 = ?, city = ?, province = ?, postcode = ? WHERE id = ? AND customer = ?";
             statement = connection.prepareStatement(updateSQL);
             statement.setString(1, address.getTitle());
             statement.setString(2, address.getLine1());
@@ -27,7 +27,14 @@ public class ShippingAddressAccess {
             statement.setString(6, address.getPostcode());
             statement.setInt(7, addressId);
             statement.setInt(8, customerId);
-            statement.executeUpdate();
+            int rowAffected = statement.executeUpdate();
+            if (rowAffected > 0) {
+                response = "1 row(s) has been affected";
+                System.out.println(response);
+            }else{
+                response = "Failed";
+                System.out.println(response);
+            }
 
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -36,6 +43,8 @@ public class ShippingAddressAccess {
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
+
+        return response;
     }
 
     // get shiping address dengan customer id

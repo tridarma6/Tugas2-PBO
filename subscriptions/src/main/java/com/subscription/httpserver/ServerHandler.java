@@ -101,7 +101,7 @@ public class ServerHandler implements HttpHandler {
                         System.err.println("SQL Exception: " + e.getMessage());
                         responseHandler.sendResponse(exchange, 500, "Internal Server Error");
                     }
-                }else if("shipping_address".equals(path[1])){
+                }else if("shipping_address".equals(path[3])){
                     String requestBodyString = parseRequestBody(exchange.getRequestBody());
                     System.out.println("Request Body: " + requestBodyString); // Log the request body
                     System.out.println("Request Body: " + requestBodyString); // Log the request body
