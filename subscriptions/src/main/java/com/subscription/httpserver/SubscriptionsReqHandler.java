@@ -2,11 +2,11 @@ package com.subscription.httpserver;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.time.LocalDateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.subscription.model.Customers;
+import com.subscription.model.Items;
 import com.subscription.model.Subscriptions;
 import com.subscription.persistence.SubscriptionsAccess;
 
@@ -41,7 +41,6 @@ public class SubscriptionsReqHandler{
                     }
                     jsonSubs.put(SUBSCRIPTIONS_RECORD, jsonSubsArray);
                     break;
-
                 }
             case 3:
                 subsId = Integer.parseInt(path[2]);
@@ -60,6 +59,24 @@ public class SubscriptionsReqHandler{
         return jsonSubs;
     }
 
+    public String postSubscriptions(JSONObject jsonObject) throws SQLException{
+        Subscriptions subscriptions = parseSubs(jsonObject);
+        return subscriptionsAccess.addNewSubscription(subscriptions);
+    }
+
+    private Subscriptions parseSubs(JSONObject jsonObject){
+        Subscriptions subs = new Subscriptions();
+        subs.setId(jsonObject.getInt("id"));
+        subs.setCustomer(jsonObject.getInt("customer"));
+        subs.setBilling_period(jsonObject.getInt("billing_period"));
+        subs.setBilling_period_unit(jsonObject.getString("billing_period_unit"));
+        subs.setTotal_due(jsonObject.getInt("total_due"));
+        subs.setActived_at(jsonObject.getInt("actived_at"));
+        subs.setCurrent_term_start(jsonObject.getString("current_term_start"));
+        subs.setCurrent_term_end(jsonObject.getString("current_term_end"));
+        subs.setStatus(jsonObject.getString("status"));
+        return subs;
+    }
     private JSONObject toJSONObject(Subscriptions subscriptions) {
         JSONObject jsonSubsResult = new JSONObject();
         jsonSubsResult.put("id", subscriptions.getId());
@@ -74,4 +91,5 @@ public class SubscriptionsReqHandler{
         return jsonSubsResult;
     }
 
+    
 }

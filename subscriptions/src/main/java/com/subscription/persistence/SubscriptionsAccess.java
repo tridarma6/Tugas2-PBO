@@ -44,13 +44,13 @@ public class SubscriptionsAccess {
     
                 subscription = new Subscriptions();
                 subscription.setId(result.getInt("subscription_id"));
-                subscription.setCustomer(customer);
+                subscription.setCustomer(customer.getId());
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
-                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
-                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                subscription.setActived_at(result.getInt("actived_at"));
+                subscription.setCurrent_term_start(result.getString("current_term_start"));
+                subscription.setCurrent_term_end(result.getString("current_term_end"));
                 subscription.setStatus(result.getString("status"));
     
                 List<SubscriptionItems> subscriptionItems = new ArrayList<>();
@@ -115,7 +115,7 @@ public class SubscriptionsAccess {
 
                 Subscriptions subscription = new Subscriptions();
                 subscription.setId(rs.getInt("id"));
-                subscription.setCustomer(customer);
+                subscription.setCustomer(customer.getId());
 
                 List<SubscriptionItems> subscriptionItems = new ArrayList<>();
                 do {
@@ -163,7 +163,7 @@ public class SubscriptionsAccess {
             state.setInt(3, subscriptions.getBilling_period());
             state.setString(4, subscriptions.getBilling_period_unit().toString());
             state.setInt(5, subscriptions.getTotal_due());
-            state.setString(6, subscriptions.getActived_at().toString());
+            state.setInt(6, subscriptions.getActived_at());
             state.setString(7, subscriptions.getCurrent_term_start().toString());
             state.setString(8, subscriptions.getCurrent_term_start().toString());
             state.setString(9, subscriptions.getStatus().toString());
@@ -209,13 +209,13 @@ public class SubscriptionsAccess {
                 // Assuming customer ID is being set directly. Modify as needed.
                 Customers customer = new Customers();
                 customer.setId(result.getInt("customer"));
-                subscription.setCustomer(customer);
+                subscription.setCustomer(customer.getId());
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
-                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
-                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                subscription.setActived_at(result.getInt("actived_at"));
+                subscription.setCurrent_term_start(result.getString("current_term_start"));
+                subscription.setCurrent_term_end(result.getString("current_term_end"));
                 listSubscriptions.add(subscription);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -249,14 +249,14 @@ public class SubscriptionsAccess {
                 
                 Customers customer = new Customers();
                 customer.setId(result.getInt("customer"));
-                subscription.setCustomer(customer);
+                subscription.setCustomer(customer.getId());
 
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
-                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
-                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                subscription.setActived_at(result.getInt("actived_at"));
+                subscription.setCurrent_term_start(result.getString("current_term_start"));
+                subscription.setCurrent_term_end(result.getString("current_term_end"));
                 listSubscriptions.add(subscription);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -309,13 +309,13 @@ public class SubscriptionsAccess {
 
                 // Mengisi data langganan
                 subscription.setId(result.getInt("subscription_id"));
-                subscription.setCustomer(customer);
+                subscription.setCustomer(customer.getId());
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
                 subscription.setTotal_due(result.getInt("total_due"));
-                subscription.setActived_at(result.getTimestamp("actived_at").toLocalDateTime());
-                subscription.setCurrent_term_start(result.getTimestamp("current_term_start").toLocalDateTime());
-                subscription.setCurrent_term_end(result.getTimestamp("current_term_end").toLocalDateTime());
+                subscription.setActived_at(result.getInt("actived_at"));
+                subscription.setCurrent_term_start(result.getString("current_term_start"));
+                subscription.setCurrent_term_end(result.getString("current_term_end"));
 
                 // Mengisi data item langganan
                 do {

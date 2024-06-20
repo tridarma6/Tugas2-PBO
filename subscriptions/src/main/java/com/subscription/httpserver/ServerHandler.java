@@ -66,7 +66,27 @@ public class ServerHandler implements HttpHandler {
                         throw new RuntimeException(e);
                     }
 
+                }else if ("subscriptions".equals(path[1])) {
+                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
+                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                
+                    try {
+                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
+                        response = subscriptionsReqHandler.postSubscriptions(jsonRequestBody);
+                        responseHandler.sendResponse(exchange, 200, response);
+                    } catch (JSONException e) {
+                        // Print stack trace for detailed error analysis
+                        e.printStackTrace();
+                        responseHandler.sendResponse(exchange, 400, "Invalid JSON format: " + e.getMessage());
+                    } catch (SQLException e) {
+                        // Log SQL exception
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                 }
+
+                
+                
             }else if ("PUT".equals(exchange.getRequestMethod())) {
                 if ("customers".equals(path[1])) {
                     String requestBodyString = parseRequestBody(exchange.getRequestBody());
