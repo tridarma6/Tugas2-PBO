@@ -1,7 +1,7 @@
 package com.subscription.model;
 public class ShippingAddress {
     private int id;
-    private Customers customer;
+    private int customer;
     private String title;
     private String line1;
     private String line2;
@@ -13,7 +13,7 @@ public class ShippingAddress {
 
     }
     
-    public ShippingAddress(int id, Customers customer, String title, String line1, String line2, String city, String province, String postcode) {
+    public ShippingAddress(int id, int customer, String title, String line1, String line2, String city, String province, String postcode) {
         this.id = id;
         this.customer = customer;
         this.title = title;
@@ -32,20 +32,16 @@ public class ShippingAddress {
         this.id = id;
     }
 
-    public Customers getCustomer() {
+    public int getCustomer() {
         return customer;
     }
 
     public int getCustomerId() {
-        return customer.getId();
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = Customers.valueOf(customer);
+        return customer;
     }
 
     public void setCustomer(int customer) {
-        this.customer.setId(customer); 
+        this.customer = customer;
     }
 
     public String getTitle() {
@@ -94,9 +90,5 @@ public class ShippingAddress {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
-    }
-
-    public void setCustomer(Customers customer2) {
-        this.customer = customer2;
     }
 }

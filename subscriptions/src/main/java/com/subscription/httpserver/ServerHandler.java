@@ -107,7 +107,7 @@ public class ServerHandler implements HttpHandler {
                     System.out.println("Request Body: " + requestBodyString); // Log the request body
                     try {
                         JSONObject jsonRequestBody = new JSONObject(requestBodyString);
-                        response = shippingAddressReqHandler.updateShippingAddress(jsonRequestBody, path);
+                        response = shippingAddressReqHandler.putShippingAddress(jsonRequestBody, path);
                         responseHandler.sendResponse(exchange, 200, response);
                     } catch (JSONException e) {
                         // Handle invalid JSON format
@@ -120,24 +120,18 @@ public class ServerHandler implements HttpHandler {
                     }
                 }
             }else if("DELETE".equals(exchange.getRequestMethod())){
-                if ("items".equals(path[2])) {
-                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
-                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                if ("items".equals(path[1])) {
                     try {
-                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
-                        response = itemsReqHandler.deleteItems(jsonRequestBody, path);
+                        response = itemsReqHandler.deleteItems(path);
                         responseHandler.sendResponse(exchange, 200, response);
                     } catch (JSONException e) {
                         responseHandler.sendResponse(exchange, 400, "Invalid JSON format");
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
-                }else if("cards".equals(path[1])){
-                    String requestBodyString = parseRequestBody(exchange.getRequestBody());
-                    System.out.println("Request Body: " + requestBodyString); // Log the request body
+                }else if("cards".equals(path[3])){
                     try {
-                        JSONObject jsonRequestBody = new JSONObject(requestBodyString);
-                        response = cardsReqHandler.deleteCards(jsonRequestBody, path);
+                        response = cardsReqHandler.deleteCards(path);
                         responseHandler.sendResponse(exchange, 200, response);
                     } catch (JSONException e) {
                         responseHandler.sendResponse(exchange, 400, "Invalid JSON format");

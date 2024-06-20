@@ -81,7 +81,7 @@ public class CardsAccess{
             System.out.println("Connected to the database");
 
             // Cek jika kartu adalah primary
-            String selectQuery = "SELECT is_primary FROM cards WHERE id = ? AND customer_id = ?";
+            String selectQuery = "SELECT is_primary FROM cards WHERE id = ? AND customer = ?";
             selectState = conn.prepareStatement(selectQuery);
             selectState.setInt(1, cardId);
             selectState.setInt(2, customerId);
@@ -91,7 +91,7 @@ public class CardsAccess{
                 int isPrimary = rs.getInt("is_primary");
                 if (isPrimary == 0) {
                     // Hapus Card jika tidak primary
-                    String deleteQuery = "DELETE FROM cards WHERE id = ? AND customer_id = ?";
+                    String deleteQuery = "DELETE FROM cards WHERE id = ? AND customer = ?";
                     deleteState = conn.prepareStatement(deleteQuery);
                     deleteState.setInt(1, cardId);
                     deleteState.setInt(2, customerId);

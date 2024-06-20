@@ -165,6 +165,7 @@ public class ItemsAccess{
 
         return response;
     }
+    
     public String deleteItem(int id) throws SQLException{
         Connection conn = null;
         PreparedStatement state = null;

@@ -1,20 +1,20 @@
 package com.subscription.httpserver;
 
 import java.sql.SQLException;
-
 import org.json.JSONObject;
-
+import com.subscription.model.Customers;
 import com.subscription.model.ShippingAddress;
 import com.subscription.persistence.ShippingAddressAccess;
 
-public class ShippingAddressReqHandler{
+public class ShippingAddressReqHandler {
 
     ShippingAddressAccess shippingAddressAccess = new ShippingAddressAccess();
 
     private ShippingAddress parseShippingAddressFromJSON(JSONObject jsonObject) {
         ShippingAddress shippingAddress = new ShippingAddress();
         shippingAddress.setId(jsonObject.optInt("id"));
-        shippingAddress.setCustomer(jsonObject.optString("customer"));
+        // Ambil ID pelanggan dari JSON dan buat objek Customers
+        shippingAddress.setCustomer(jsonObject.optInt("customer"));
         shippingAddress.setTitle(jsonObject.optString("title"));
         shippingAddress.setLine1(jsonObject.optString("line1"));
         shippingAddress.setLine2(jsonObject.optString("line2"));
@@ -24,30 +24,10 @@ public class ShippingAddressReqHandler{
         return shippingAddress;
     }
 
-    public String updateShippingAddress(JSONObject jsonRequestBody, String[] path) throws SQLException{
-        try {
-            // Mengambil customerId dan addressId dari path
-            int customerId = Integer.parseInt(path[2]);
-            int addressId = Integer.parseInt(path[4]);
-
-            // Mengurai objek JSON menjadi ShippingAddress
-            ShippingAddress shippingAddress = parseShippingAddressFromJSON(jsonRequestBody);
-
-            // Memperbarui alamat pengiriman
-            String response = shippingAddressAccess.updateShippingAddress(customerId, addressId, shippingAddress);
-
-            // Mengembalikan respons sukses
-            return "{\"status\":\"success\",\"message\":\"Alamat pengiriman berhasil diperbarui.\"}";
-
-        } catch (NumberFormatException e) {
-            // Menangani pengecualian format angka
-            return "{\"status\":\"error\",\"message\":\"ID pelanggan atau ID alamat tidak valid.\"}";
-        } catch (SQLException e) {
-            // Menangani pengecualian SQL
-            return "{\"status\":\"error\",\"message\":\"Kesalahan basis data: " + e.getMessage() + "\"}";
-        } catch (Exception e) {
-            // Menangani pengecualian umum
-            return "{\"status\":\"error\",\"message\":\"Terjadi kesalahan yang tidak terduga: " + e.getMessage() + "\"}";
-        }
+    public String putShippingAddress(JSONObject jsonObject, String[] path) throws SQLException {
+        ShippingAddress shippingAddress = parseShippingAddressFromJSON(jsonObject);
+        int idShippingAddress = Integer.parseInt(path[4]);
+        int idCustomer = Integer.parseInt(path[2]);
+        return shippingAddressAccess.updateShippingAddress(idCustomer, idShippingAddress, shippingAddress);
     }
 }

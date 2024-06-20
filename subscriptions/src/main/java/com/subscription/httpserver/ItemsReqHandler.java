@@ -34,7 +34,7 @@ public class ItemsReqHandler {
         return itemsAccess.updateItem(idItem, item);
     }
 
-    public String deleteItems(JSONObject jsonObject, String[] path) throws SQLException {
+    public String deleteItems(String[] path) throws SQLException {
         int idItem = Integer.parseInt(path[2]);
         return itemsAccess.deleteItem(idItem);
     }

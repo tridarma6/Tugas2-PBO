@@ -3,7 +3,6 @@ package com.subscription.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 
-import com.subscription.model.Customers;
 import com.subscription.model.ShippingAddress;
 
 public class ShippingAddressAccess {
@@ -73,12 +72,9 @@ public class ShippingAddressAccess {
                 String province = result.getString("province");
                 String postcode = result.getString("postcode");
 
-                Customers customer = new Customers();
-                customer.setId(customerId);
-
                 ShippingAddress address = new ShippingAddress();
                 address.setId(id);
-                address.setCustomer(customer);
+                address.setCustomer(customerId);
                 address.setTitle(title);
                 address.setLine1(line1);
                 address.setLine2(line2);

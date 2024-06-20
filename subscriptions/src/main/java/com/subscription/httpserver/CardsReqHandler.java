@@ -23,10 +23,10 @@ public class CardsReqHandler{
         return cards;
     }
 
-    public String deleteCards(JSONObject jsonRequestBody, String[] path) throws SQLException {
+    public String deleteCards(String[] path) throws SQLException {
         // Parse customer ID and card ID from the path
         int customerId = Integer.parseInt(path[2]); // Assuming /cards/customerId/cardId
-        int cardId = Integer.parseInt(path[3]);
+        int cardId = Integer.parseInt(path[4]);
 
         return cardsAccess.deleteCard(customerId, cardId);
     }
