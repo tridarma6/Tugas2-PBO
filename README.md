@@ -19,44 +19,45 @@ Program pada dasarnya dapat digunakan dengan mengakses **localhost:9052** di web
 ### Get
 Mendapatkan seluruh record item </br>
 `http://localhost:9052/items`
-img/Screenshot (249).png
+![alt text](<img/Screenshot (249).png>)
 
 Mendapatkan seluruh record user </br>
 `http://localhost:9052/customers`
-img/Screenshot (250).png>
+![alt text](<img/Screenshot (250).png>)
 
 Mendapatkan record customer dengan ID customer adalah 5
 `http://localhost:9052/customers/5`
-img/Screenshot (251).png
+![alt text](<img/Screenshot (251).png>)
 
 Mendapatkan record item dengan ID item adalah 6
 `http://localhost:9052/items/6`
-img/Screenshot (252).png>
+![alt text](<img/Screenshot (252).png>)
 
 Mendapatkan record cards dengan ID Customer adalah 
 `http://localhost:9052/customers/1/cards`
-img/Screenshot (253).png
+![alt text](<img/Screenshot (253).png>)
 
 Mendapatkan record subscriptions dengan ID customer adalah 1
 `http://localhost:9052/customers/1/subscriptions`
-img/Screenshot (254).png
+![alt text](<img/Screenshot (254).png>)
 
 Mendapatkan record customer's subscription record berdasarkan ID customer adalah 1
 `http://localhost:9052/customers/1/subscriptions?subscriptions_status=active`
-img/Screenshot (255).png
+![alt text](<img/Screenshot (255).png>)
 
 Mendapatkan record shiping address berdasarkan ID customer adalah 1
 `http://localhost:9052/customers/1/shipping_address`
-img/Screenshot (256).png
+![alt text](<img/Screenshot (256).png>)
 
 Mendapatkan record semua subscription
 `http://localhost:9052/subscriptions`
-img/Screenshot (257).png
+![alt text](<img/Screenshot (257).png>)
 
 Mendapatkan record subscription dengan current term end descending
 `http://localhost:9052/subscriptions?sort_by=current_term_end&sort_type=desc`
-img/Screenshot (259).png
+![alt text](<img/Screenshot (259).png>)
 
 Mendapatkan record item dengan status active adalah true
 `http://localhost:9052/items?is_active=true`
-img/Screenshot (261).png
+![alt text](<img/Screenshot (261).png>)`
+
