@@ -25,39 +25,39 @@ Mendapatkan seluruh record user </br>
 `http://localhost:9052/customers`
 ![alt text](<img/Screenshot (250).png>)
 
-Mendapatkan record customer dengan ID customer adalah 5
+Mendapatkan record customer dengan ID customer adalah 5 </br>
 `http://localhost:9052/customers/5`
 ![alt text](<img/Screenshot (251).png>)
 
-Mendapatkan record item dengan ID item adalah 6
+Mendapatkan record item dengan ID item adalah 6 </br>
 `http://localhost:9052/items/6`
 ![alt text](<img/Screenshot (252).png>)
-
-Mendapatkan record cards dengan ID Customer adalah 
+ 
+Mendapatkan record cards dengan ID Customer adalah  </br>
 `http://localhost:9052/customers/1/cards`
 ![alt text](<img/Screenshot (253).png>)
 
-Mendapatkan record subscriptions dengan ID customer adalah 1
+Mendapatkan record subscriptions dengan ID customer adalah 1 </br>
 `http://localhost:9052/customers/1/subscriptions`
 ![alt text](<img/Screenshot (254).png>)
 
-Mendapatkan record customer's subscription record berdasarkan ID customer adalah 1
+Mendapatkan record customer's subscription record berdasarkan ID customer adalah 1 </br>
 `http://localhost:9052/customers/1/subscriptions?subscriptions_status=active`
 ![alt text](<img/Screenshot (255).png>)
 
-Mendapatkan record shiping address berdasarkan ID customer adalah 1
+Mendapatkan record shiping address berdasarkan ID customer adalah 1 </br>
 `http://localhost:9052/customers/1/shipping_address`
 ![alt text](<img/Screenshot (256).png>)
 
-Mendapatkan record semua subscription
+Mendapatkan record semua subscription </br>
 `http://localhost:9052/subscriptions`
 ![alt text](<img/Screenshot (257).png>)
 
-Mendapatkan record subscription dengan current term end descending
+Mendapatkan record subscription dengan current term end descending </br>
 `http://localhost:9052/subscriptions?sort_by=current_term_end&sort_type=desc`
 ![alt text](<img/Screenshot (259).png>)
 
-Mendapatkan record item dengan status active adalah true
+Mendapatkan record item dengan status active adalah true </br>
 `http://localhost:9052/items?is_active=true`
 ![alt text](<img/Screenshot (261).png>)`
 
