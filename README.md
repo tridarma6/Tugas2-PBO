@@ -89,6 +89,24 @@ Menambahkan data baru pada Subscriptions </br>
 Data berhasil di tambahkan, berikut merupakan data dari tabel subscriptions 
 ![Subscription Data](img/Screenshot%20(268).png)
 
+### PUT
+
+Mengupdate data yang sudah ada pada Customer dengan ID 5 </br>
+`http://localhost:9052/customers/5`
+![Customer Data](img/Screenshot%20(278).png)
+Berikut merupakan hasil data yang sudah di update dengan customer ID 5 </br>
+![Customer Data](img/Screenshot%20(279).png)
+
+Mengupdate data yang sudah ada pada Items dengan ID 6 </br>
+`http://localhost:9052/items/6`
+![Items Data](img/Screenshot%20(283).png)
+Berikut merupakan hasil data yang sudah di update dengan items ID 6 </br>
+![Items Data](img/Screenshot%20(284).png)
+
+Mengupdate data yang sudah di update dengan shiping address ID 1 dengan customer ID 1 </br>
+`http://localhost:9052/customers/1/shipping_address/1`
+![Subscriptions](img/Screenshot%20(281).png)
+
 ### DELETE
 
 Menghapus status is_active menjadi false pada tabel items berdasarkan ID </br>

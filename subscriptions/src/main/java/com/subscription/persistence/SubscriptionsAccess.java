@@ -159,7 +159,7 @@ public class SubscriptionsAccess {
             state = conn.prepareStatement("INSERT INTO subscriptions VALUES(?,?,?,?,?,?,?,?,?);");
             System.out.println("Inserting data to table subscriptions");
             state.setInt(1, subscriptions.getId());
-            state.setInt(2, subscriptions.getCustomerId());
+            state.setInt(2, subscriptions.getCustomer());
             state.setInt(3, subscriptions.getBilling_period());
             state.setString(4, subscriptions.getBilling_period_unit().toString());
             state.setInt(5, subscriptions.getTotal_due());
@@ -301,14 +301,14 @@ public class SubscriptionsAccess {
 
             if (result.next()) {
                 // Mengisi data pelanggan
-                customer.setId(result.getInt("customer_id"));
+                customer.setId(result.getInt("customer"));
                 customer.setFirst_name(result.getString("first_name"));
                 customer.setLast_name(result.getString("last_name"));
                 customer.setEmail(result.getString("email"));
                 customer.setPhone_number(result.getString("phone_number"));
 
                 // Mengisi data langganan
-                subscription.setId(result.getInt("subscription_id"));
+                subscription.setId(result.getInt("id"));
                 subscription.setCustomer(customer.getId());
                 subscription.setBilling_period(result.getInt("billing_period"));
                 subscription.setBilling_period_unit(result.getString("billing_period_unit"));
