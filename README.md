@@ -1,11 +1,11 @@
 # API JAVA OOP | Sistem Pembayaran Subscriptions
-Nama : Nyoman Tri Darma Wahyudi
-NIM  : 2305551052
-Kelas: PBO E
+Nama : Nyoman Tri Darma Wahyudi </br>
+NIM  : 2305551052 </br>
+Kelas: PBO E 
 
-Nama : Putu Rifki Dirkayuda
-NIM  : 2305551068
-Kelas: PBO E
+Nama : Putu Rifki Dirkayuda </br>
+NIM  : 2305551068 </br>
+Kelas: PBO E </br>
 
 ## Introducing
 Tugas ini adalah backendAPI sederhana yang dibuat dengan bahasa JAVA dan maven, yang mana disusun untuk aplikasi Sistem Pembayaran Subscription. API digunakan untuk melakukan manipulasi data pada tiap entitas dari database dan dapat mengatur GET, POST, PUT, DELETE. Response yang diberikan oleh server API menggunakan format **JSON** dan data disimpan pada DATABASE **SQLite**. Pengujian aplikasi dilakukan pada aplikasi **Postman**.
