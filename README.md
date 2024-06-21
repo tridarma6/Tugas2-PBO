@@ -20,7 +20,7 @@ Program ini memiliki 3 type kelas, yakni class untuk pertama yakni class untuk m
 
 Program pada dasarnya dapat digunakan dengan mengakses **localhost:9052** di web browser masing-masing. Namun, untuk mempermudah test, maka digunakan Postman.
 
-### Get
+### GET
 
 Mendapatkan seluruh record item </br>
 `http://localhost:9052/items`
@@ -66,7 +66,7 @@ Mendapatkan record item dengan status active adalah true </br>
 `http://localhost:9052/items?is_active=true`
 ![Get Active Items](img/Screenshot%20(261).png)
 
-### Post
+### DELETE
 
 Menambahkan data baru pada Customers </br>
 `http://localhost:9052/customers`
@@ -89,7 +89,7 @@ Menambahkan data baru pada Subscriptions </br>
 Data berhasil di tambahkan, berikut merupakan data dari tabel subscriptions 
 ![Subscription Data](img/Screenshot%20(268).png)
 
-### Delete
+### DELETE
 
 Menghapus status is_active menjadi false pada tabel items berdasarkan ID </br>
 `http://localhost:9052/items/5`
@@ -104,3 +104,12 @@ Menghapus informasi kartu kredit pelanggan jika is_primary bernilai false </br>
 
 Data dengan is_primary bernilai false berhasil di hapus 
 ![Card Data Deleted](img/Screenshot%20(275).png)
+
+### ERROR 405 (Selain Delete, Put, Post, Get)
+PATCH `http://localhost:9052`
+![alt text](<img/Screenshot 2024-06-21 090547.png>)
+
+### ERROR 404
+Tidak terdapat entitas field test
+`http://localhost:9052/test`
+![alt text](<img/Screenshot 2024-06-21 090952.png>)

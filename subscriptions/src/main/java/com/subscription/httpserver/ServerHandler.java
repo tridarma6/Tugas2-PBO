@@ -86,7 +86,7 @@ public class ServerHandler implements HttpHandler {
                 }
 
                 
-                
+
             }else if ("PUT".equals(exchange.getRequestMethod())) {
                 if ("customers".equals(path[1])) {
                     String requestBodyString = parseRequestBody(exchange.getRequestBody());
@@ -190,7 +190,7 @@ public class ServerHandler implements HttpHandler {
             if (jsonSubs != null) {
                 responseHandler.getResponse(exchange, jsonSubs.toString(), path, "subscripitons", 200);
             } else {
-                responseHandler.sendResponse(exchange, 404, "Not Found P");
+                responseHandler.sendResponse(exchange, 404, "Not Found");
             }
         } catch (SQLException e) {
             e.printStackTrace();
