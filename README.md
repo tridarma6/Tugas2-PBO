@@ -65,32 +65,32 @@ Mendapatkan record item dengan status active adalah true </br>
 Menambahkan data baru pada Customers </br>
 `http://localhost:9052/customers`
 ![alt text](<img/Screenshot (262).png>)`
-Data berhasil di tambahkan, berikut merupakan data dari tabel customers </br>
+Data berhasil di tambahkan, berikut merupakan data dari tabel customers 
 ![alt text](<img/Screenshot (263).png>)`
 
 Menambahkan data baru pada Items </br>
 `http://localhost:9052/items`
 ![alt text](<img/Screenshot (264).png>)`
-Data berhasil di tambahkan, berikut merupakan data dari tabel items </br>
+Data berhasil di tambahkan, berikut merupakan data dari tabel items 
 ![alt text](<img/Screenshot (265).png>)`
 
 Menambahkan data baru pada Subscriptions </br>
 `http://localhost:9052/subscriptions`
 ![alt text](<img/Screenshot (267).png>)`
-Data berhasil di tambahkan, berikut merupakan data dari tabel subscriptions </br>
+Data berhasil di tambahkan, berikut merupakan data dari tabel subscriptions 
 ![alt text](<img/Screenshot (268).png>)`
 
 ### Delete
 Menghapus status is_active menjadi false pada tabel items berdasarkan ID  </br>
 `http://localhost:9052/items/5`
 ![alt text](<img/Screenshot (274).png>)`
-Data dengan status is_active berhasil di ubah menjadi false </br>
+Data dengan status is_active berhasil di ubah menjadi false 
 ![alt text](<img/Screenshot (270).png>)`
 
 Menghapus informasi kartu kredit pelanggan jika is_primary bernilai false </br>
 `http://localhost:9052/customer/1/cards/6`
 ![alt text](<img/Screenshot (272).png>)`
-Data dengan is_primary bernilai  false berhasil di hapus </br>
+Data dengan is_primary bernilai  false berhasil di hapus 
 ![alt text](<img/Screenshot (275).png>)`
 
 
