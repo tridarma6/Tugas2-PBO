@@ -90,7 +90,7 @@ Data dengan status is_active berhasil di ubah menjadi false </br>
 Menghapus informasi kartu kredit pelanggan jika is_primary bernilai false </br>
 `http://localhost:9052/customer/1/cards/6`
 ![alt text](<img/Screenshot (272).png>)`
-Data dengan is_primary bernilai  false berhasil di hapus
+Data dengan is_primary bernilai  false berhasil di hapus </br>
 ![alt text](<img/Screenshot (275).png>)`
 
 
