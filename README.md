@@ -58,6 +58,10 @@ Mendapatkan record semua subscription </br>
 `http://localhost:9052/subscriptions`
 ![Get All Subscriptions](img/Screenshot%20(257).png)
 
+Mendapatkan record subscription dan informasi dari customer, subscription items berdasarkan subs ID adalah 2 </br>
+`http://localhost:9052/subscriptions/2`
+![Get All Subscriptions](img/Screenshot%20(285).png)
+
 Mendapatkan record subscription dengan current term end descending </br>
 `http://localhost:9052/subscriptions?sort_by=current_term_end&sort_type=desc`
 ![Get Subscriptions Sorted by Current Term End](img/Screenshot%20(259).png)
