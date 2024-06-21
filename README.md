@@ -66,7 +66,7 @@ Mendapatkan record item dengan status active adalah true </br>
 `http://localhost:9052/items?is_active=true`
 ![Get Active Items](img/Screenshot%20(261).png)
 
-### DELETE
+### POST
 
 Menambahkan data baru pada Customers </br>
 `http://localhost:9052/customers`
