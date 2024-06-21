@@ -110,6 +110,6 @@ PATCH `http://localhost:9052`
 ![alt text](<img/Screenshot 2024-06-21 090547.png>)
 
 ### ERROR 404
-Tidak terdapat entitas field test
+Tidak terdapat entitas field test </br>
 `http://localhost:9052/test`
 ![alt text](<img/Screenshot 2024-06-21 090952.png>)
